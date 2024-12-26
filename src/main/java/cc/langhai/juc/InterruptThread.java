@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 public class InterruptThread {
     public static void main(String[] args) throws InterruptedException {
         test01();
+        test02();
     }
 
 
@@ -32,5 +33,27 @@ public class InterruptThread {
         thread.interrupt();
         Thread.sleep(200);
         log.debug("打断状态：{}", thread.isInterrupted());
+    }
+
+    /**
+     * 测试 interrupt() 方法，线程正常运行。
+     *
+     * @throws InterruptedException 打断异常
+     */
+    public static void test02() throws InterruptedException {
+        Thread thread = new Thread(() -> {
+            while (true){
+                Thread currentThread = Thread.currentThread();
+                boolean interrupted = currentThread.isInterrupted();
+                if (interrupted) {
+                    log.debug("打断状态：{}", interrupted);
+                    break;
+                }
+            }
+        }, "thread-02");
+        thread.start();
+
+        Thread.sleep(200);
+        thread.interrupt();
     }
 }
